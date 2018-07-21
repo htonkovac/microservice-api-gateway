@@ -1,0 +1,34 @@
+version: '3'
+services:
+  api_gateway:
+    image: nginx
+    volumes:
+       - ./api.gateway.nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: always
+    ports:
+       - 80:80
+    networks:
+       - microservices
+  service1:
+    image: beh01der/web-service-dockerized-example
+    depends_on:
+       - api_gateway
+    environment: 
+       - SERVICE_NAME= "service1"
+    expose:
+       - 3000
+    networks:
+       - microservices
+
+  service2:
+    image: beh01der/web-service-dockerized-example
+    depends_on:
+       - api_gateway
+    environment: 
+       - SERVICE_NAME= "service2"
+    expose:
+       - 3000
+    networks:
+       - microservices
+networks:
+   microservices:
